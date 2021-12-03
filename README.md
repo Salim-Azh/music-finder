@@ -14,6 +14,6 @@ Create the branch from *dev* for the corresponding use case with the name like :
 ## Commit convention
 
 * build : changes that affect the build system or external dependencies
-* test-red : \<acceptance\> \<unit\> message
+ \<unit\> message
 * test-green: \<acceptance\> \<unit\> message
 * refactor : any modification that does not bring new features
