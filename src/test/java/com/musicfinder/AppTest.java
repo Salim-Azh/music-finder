@@ -3,13 +3,13 @@ package com.musicfinder;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
 
-public class AppTest 
-{
+import org.junit.runner.RunWith;
 
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
+@RunWith(Cucumber.class)
+@CucumberOptions(plugin = {"pretty"})
+public class AppTest {
+    
 }
