@@ -4,30 +4,35 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import com.musicfinder.services.fetch.ItunesSongFetcher;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class SongStepDefinition {
+
+    ItunesSongFetcher sf;
+
     @Given("the user is signed in")
     public void the_user_is_signed_in() {
-        User.login("TEST","TEST");
+        //User.login("TEST","TEST");
         //throw new io.cucumber.java.PendingException();
     }
 
     @Given("the user hits the search song button")
     public void the_user_hits_search_button() {
-        SongFinderService sf = new SongFinderService();
+        sf = new ItunesSongFetcher();
     }
 
     @When("the user researched for \"Hello\"")
     public void the_user_researched_for_hello() {
-        assertEquals(null, sf.find("Hello"));
+        assertEquals(null, sf.search("Hello"));
     }
 
     @When("the user researched for \"Easy\"")
     public void the_user_researched_for_easy() {
-        assertEquals(null, sf.find("Easy"));
+        assertEquals(null, sf.search("Easy"));
     }
 
     @Given("the available songs are")

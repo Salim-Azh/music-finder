@@ -1,18 +1,24 @@
 package com.musicfinder.services.fetch;
 
+import static org.junit.Assert.assertEquals;
+
+import com.musicfinder.model.Song;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class ItunesFetcherTest {
+
+    ItunesSongFetcher itf;
+
     @Before
     void setUp(){
-        ItunesFetcher itf = new ItunesFetcher();
+        itf = new ItunesSongFetcher();
     }
 
     @Test
     void testSearchWithoutParam(){
-        assertEquals(null, itf.search());
-        assertEquals(null, itf.search(""));
+        assertEquals(0, itf.search("").size());
     }
 
     @Test
