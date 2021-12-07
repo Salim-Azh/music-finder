@@ -8,7 +8,7 @@ Feature: Search Songs
         Given the user is signed in
     
     Scenario: No Matching Songs Found
-        When the user researched for ""
+        When the user researched with an empty string
         Then the list of songs should be empty
 
     Scenario: Matching Songs Found

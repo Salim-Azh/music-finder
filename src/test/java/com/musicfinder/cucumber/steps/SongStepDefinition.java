@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.util.List;
 
+import com.musicfinder.Client;
 import com.musicfinder.services.fetch.ItunesSongFetcher;
 
 import io.cucumber.java.en.Given;
@@ -19,7 +20,7 @@ public class SongStepDefinition {
     @Given("the user is signed in")
     public void the_user_is_signed_in() {
         client = new Client();
-        client.login("","");
+        //client.login("","");
     }
 
     @When("the user researched with an empty string")

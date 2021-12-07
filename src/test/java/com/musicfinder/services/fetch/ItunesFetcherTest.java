@@ -11,19 +11,19 @@ public class ItunesFetcherTest {
     ItunesSongFetcher itf;
 
     @Before
-    void setUp(){
+    public void setUp(){
         itf = new ItunesSongFetcher();
     }
 
     @Test
-    void testSearchWithoutParam(){
+    public void testSearchWithoutParam(){
         itf.setFetchedSongs(null);
         itf.search("");
         assertEquals(0, itf.getFetchedSongs().size());
     }
 
     @Test
-    void testSearch(){
+    public void testSearch(){
         itf.setFetchedSongs(null);
         itf.search("Easy");
         assertNotEquals(0, itf.getFetchedSongs().size());

@@ -11,18 +11,18 @@ public class SongTest {
     Song emptySong;
 
     @Before
-    void setUp(){
+    public void setUp(){
         emptySong = new Song();
         song = new Song(1, "Easy", "Troye", "Pop");
     }
 
     @Test
-    void testNotEquals(){
+    public void testNotEquals(){
         assertEquals(false, song.equals(emptySong));
     }
 
     @Test
-    void testEquals(){
+    public void testEquals(){
         assertEquals(true, song.equals(new Song(1, "Easy", "Troye", "Pop")));
     }
     
