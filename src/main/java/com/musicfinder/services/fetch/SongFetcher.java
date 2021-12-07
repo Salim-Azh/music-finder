@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.musicfinder.model.Song;
 
+/**
+ * 
+ * Allows to communicate with an external API in order to fetch data about songs.
+ */
 public interface SongFetcher {
     /**
      * Search for songs data within an external API

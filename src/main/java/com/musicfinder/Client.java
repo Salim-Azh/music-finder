@@ -20,6 +20,15 @@ public class Client {
 
     /**
      * 
+     * Retrieve the last fetched songs if any
+     * @return a list of the last fetched songs, an empty list if no song has been fetched before
+     */
+    public List<Song> getFetchedSongs(){
+        return songFetcher.getFetchedSongs();
+    }
+
+    /**
+     * 
      * Search for songs within an external API and display the resulting data
      * @param term the term used for the research
      */
@@ -37,13 +46,8 @@ public class Client {
         }
     }
 
-    /**
-     * Retrieve the last fetched songs if any
-     * @return a list of the last fetched songs, an empty list if no song has been fetched before
-     */
-    public List<Song> getFetchedSongs(){
-        return songFetcher.getFetchedSongs();
+    public void login(String email, String password){
+        //TODO: Implement
     }
-
     
 }

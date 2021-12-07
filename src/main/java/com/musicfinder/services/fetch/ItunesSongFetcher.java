@@ -16,6 +16,7 @@ import com.musicfinder.model.Song;
 public class ItunesSongFetcher implements SongFetcher {
 
     /**
+     * 
      * Store the last fetched songs.
      */
     private List<Song> fetchedSongs;
@@ -33,7 +34,6 @@ public class ItunesSongFetcher implements SongFetcher {
     /**
      * 
      * Search within the ITunes API.
-     * 
      */
     @Override
     public List<Song> search(String term) {
