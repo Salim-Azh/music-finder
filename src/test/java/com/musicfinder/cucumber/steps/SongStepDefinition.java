@@ -32,12 +32,12 @@ public class SongStepDefinition {
         client.search("Easy");
     }
 
-    @Then("the user should see a \"No matching song found\" warning")
-    public void the_user_should_see_no_songs_found_warning(){
+    @Then("the list of songs should be empty")
+    public void the_user_should_see_no_songs(){
         assertEquals(0,client.getFetchedSongs().size());
     }
 
-    @Then("the user should see \"Matching song found: Easy by Troye, Easy by OtherArtist\"")
+    @Then("the list of songs should not be empty")
     public void the_user_should_see_found_songs(){
         assertNotEquals(0, client.getFetchedSongs().size());
     }

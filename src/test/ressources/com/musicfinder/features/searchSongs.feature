@@ -9,10 +9,10 @@ Feature: Search Songs
     
     Scenario: No Matching Songs Found
         When the user researched for ""
-        Then the user should see a "No matching song found" warning
+        Then the list of songs should be empty
 
     Scenario: Matching Songs Found
         When the user researched for "Easy"
-        Then the user should see "Matching song found: Easy by Troye, Easy by OtherArtist"
+        Then the list of songs should not be empty
 
         

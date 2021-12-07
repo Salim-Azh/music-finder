@@ -17,11 +17,15 @@ public class ItunesFetcherTest {
 
     @Test
     void testSearchWithoutParam(){
-        assertEquals(0, itf.search("").size());
+        itf.setFetchedSongs(null);
+        itf.search("");
+        assertEquals(0, itf.getFetchedSongs().size());
     }
 
     @Test
     void testSearch(){
-        assertNotEquals(0, itf.search("Easy").size());
+        itf.setFetchedSongs(null);
+        itf.search("Easy");
+        assertNotEquals(0, itf.getFetchedSongs().size());
     }
 }
