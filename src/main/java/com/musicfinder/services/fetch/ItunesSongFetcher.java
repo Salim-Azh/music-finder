@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -12,26 +14,35 @@ import com.google.gson.JsonParser;
 import com.musicfinder.model.Song;
 
 public class ItunesSongFetcher implements SongFetcher {
-    public static void main(String[] args) {
-        ItunesSongFetcher isf = new ItunesSongFetcher();
-        isf.search("");
+
+    private List<Song> fetchedSongs;
+
+    public ItunesSongFetcher() {}
+
+    public List<Song> getFetchedSongs() {
+        return fetchedSongs;
+    }
+
+    public void setFetchedSongs(List<Song> fetchedSongs) {
+        this.fetchedSongs = fetchedSongs;
     }
 
     @Override
-    public ArrayList<Song> search(String term) {
+    public List<Song> search(String term) {
         HttpURLConnection connection = null;
-        
+        List<Song> fetchedSongs = new ArrayList<Song>();
+
+        term = term.replace(" ", "+"); //Case of mutliple words search
+
         try{
-        String url = "https://itunes.apple.com/search?term=\"Troye Sivan\"&limit=10&media=music";
-        URL obj = new URL("https://itunes.apple.com/search?term=Troye+Sivan&limit=10&media=music");
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", "Mozilla/5.0");
-        int responseCode = con.getResponseCode();
-        System.out.println("GET Response Code :: " + responseCode);
+        URL url = new URL("https://itunes.apple.com/search?limit=10&media=music&term=" + term);
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(
-                    con.getInputStream()));
+                connection.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
 
@@ -45,18 +56,23 @@ public class ItunesSongFetcher implements SongFetcher {
             String jsonString = response.toString();
             JsonObject jsonObj = new JsonParser().parse(jsonString).getAsJsonObject();
             Song[] songArray = gson.fromJson(jsonObj.get("results"), Song[].class);
-            
-            //System.out.println(response.toString());
-            for (Song song : songArray) {
+
+            fetchedSongs = new ArrayList<>(Arrays.asList(songArray));
+
+            for (Song song : fetchedSongs) {
                 System.out.println(song);
             }
         } else {
-            System.out.println("GET request did not work");
+            throw new Exception("Could not fetch songs.");
         }
     }catch(Exception e){
         e.printStackTrace();
+    }finally {
+        connection.disconnect();
     }
-    return null;
+
+    setFetchedSongs(fetchedSongs);
+    return fetchedSongs;
     
-}
+    }
 }

@@ -1,9 +1,10 @@
 package com.musicfinder.services.fetch;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.musicfinder.model.Song;
 
 public interface SongFetcher {
-    ArrayList<Song> search(String term);
+    List<Song> search(String term);
+    List<Song> getFetchedSongs();
 }
