@@ -2,16 +2,16 @@ package com.musicfinder.model;
 
 public class Song {
     private int id;
-    private String title;
+    private String trackName;
     private String artistName;
     private String genre;
     
     public Song() {
     }
 
-    public Song(int id, String title, String artistName, String genre) {
+    public Song(int id, String trackName, String artistName, String genre) {
         this.id = id;
-        this.title = title;
+        this.trackName = trackName;
         this.artistName = artistName;
         this.genre = genre;
     }
@@ -24,12 +24,12 @@ public class Song {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String gettrackName() {
+        return trackName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void settrackName(String trackName) {
+        this.trackName = trackName;
     }
 
     public String getArtistName() {
@@ -55,7 +55,7 @@ public class Song {
         result = prime * result + ((artistName == null) ? 0 : artistName.hashCode());
         result = prime * result + ((genre == null) ? 0 : genre.hashCode());
         result = prime * result + id;
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((trackName == null) ? 0 : trackName.hashCode());
         return result;
     }
 
@@ -80,17 +80,17 @@ public class Song {
             return false;
         if (id != other.id)
             return false;
-        if (title == null) {
-            if (other.title != null)
+        if (trackName == null) {
+            if (other.trackName != null)
                 return false;
-        } else if (!title.equals(other.title))
+        } else if (!trackName.equals(other.trackName))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Song [artistName=" + artistName + ", title=" + title + "]";
+        return "Song [artistName=" + artistName + ", trackName=" + trackName + "]";
     }
 
     
