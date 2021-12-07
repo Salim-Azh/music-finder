@@ -3,8 +3,6 @@ package com.musicfinder.cucumber.steps;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.List;
-
 import com.musicfinder.Client;
 import com.musicfinder.services.fetch.ItunesSongFetcher;
 
