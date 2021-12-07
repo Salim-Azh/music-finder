@@ -1,6 +1,7 @@
 package com.musicfinder.cucumber.steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.List;
 
@@ -12,51 +13,33 @@ import io.cucumber.java.en.When;
 
 public class SongStepDefinition {
 
+    Client client;
     ItunesSongFetcher sf;
 
     @Given("the user is signed in")
     public void the_user_is_signed_in() {
-        //User.login("TEST","TEST");
-        //throw new io.cucumber.java.PendingException();
+        client = new Client();
+        client.login("","");
     }
 
-    @Given("the user hits the search song button")
-    public void the_user_hits_search_button() {
-        sf = new ItunesSongFetcher();
-    }
-
-    @When("the user researched for \"Hello\"")
+    @When("the user researched with an empty string")
     public void the_user_researched_for_hello() {
-        assertEquals(null, sf.search("Hello"));
+        client.search("");
     }
 
     @When("the user researched for \"Easy\"")
     public void the_user_researched_for_easy() {
-        assertEquals(null, sf.search("Easy"));
-    }
-
-    @Given("the available songs are")
-    public void the_available_songs_are(io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        
-        List<String> songList = dataTable.column(2);
-        throw new io.cucumber.java.PendingException();
+        client.search("Easy");
     }
 
     @Then("the user should see a \"No matching song found\" warning")
     public void the_user_should_see_no_songs_found_warning(){
-        System.out.println("No matching sound found");
+        assertEquals(0,client.getFetchedSongs().size());
     }
 
     @Then("the user should see \"Matching song found: Easy by Troye, Easy by OtherArtist\"")
     public void the_user_should_see_found_songs(){
-        System.out.println("Matching song found: Easy by Troye, Easy by OtherArtist");
+        assertNotEquals(0, client.getFetchedSongs().size());
     }
 
 }
