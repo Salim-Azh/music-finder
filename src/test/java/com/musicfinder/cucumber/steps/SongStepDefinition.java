@@ -12,8 +12,7 @@ import io.cucumber.java.en.When;
 
 public class SongStepDefinition {
 
-    Client client;
-    ItunesSongFetcher sf;
+    private Client client;
 
     @Given("the user is signed in")
     public void the_user_is_signed_in() {

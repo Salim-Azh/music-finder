@@ -43,33 +43,33 @@ public class ItunesSongFetcher implements SongFetcher {
         term = term.replace(" ", "+"); //Case of mutliple words search
 
         try{
-        URL url = new URL("https://itunes.apple.com/search?limit=10&media=music&term=" + term);
-        connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
+            URL url = new URL("https://itunes.apple.com/search?limit=10&media=music&term=" + term);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
 
-        int responseCode = connection.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                connection.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                in.close();
+
+                Gson gson = new Gson();
+
+                String jsonString = response.toString();
+                JsonObject jsonObj = new JsonParser().parse(jsonString).getAsJsonObject();
+                Song[] songArray = gson.fromJson(jsonObj.get("results"), Song[].class);
+
+                fetchedSongs = new ArrayList<>(Arrays.asList(songArray));
+                
+            } else {
+                throw new Exception("Could not fetch songs.");
             }
-            in.close();
-
-            Gson gson = new Gson();
-
-            String jsonString = response.toString();
-            JsonObject jsonObj = new JsonParser().parse(jsonString).getAsJsonObject();
-            Song[] songArray = gson.fromJson(jsonObj.get("results"), Song[].class);
-
-            fetchedSongs = new ArrayList<>(Arrays.asList(songArray));
-            
-        } else {
-            throw new Exception("Could not fetch songs.");
-        }
     }catch(Exception e){
         e.printStackTrace();
     }finally {

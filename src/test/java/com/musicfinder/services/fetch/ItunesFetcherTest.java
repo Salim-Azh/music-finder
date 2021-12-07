@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class ItunesFetcherTest {
 
-    ItunesSongFetcher itf;
+    private ItunesSongFetcher itf;
 
     @Before
     public void setUp(){

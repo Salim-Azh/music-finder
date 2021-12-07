@@ -7,8 +7,8 @@ import org.junit.Test;
 
 public class SongTest {
 
-    Song song;
-    Song emptySong;
+    private Song song;
+    private Song emptySong;
 
     @Before
     public void setUp(){

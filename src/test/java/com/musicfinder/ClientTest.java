@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class ClientTest {
  
-    Client client;
+    private Client client;
 
     @Before
     public void setUp(){
