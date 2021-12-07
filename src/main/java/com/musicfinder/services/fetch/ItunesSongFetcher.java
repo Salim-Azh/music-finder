@@ -58,10 +58,7 @@ public class ItunesSongFetcher implements SongFetcher {
             Song[] songArray = gson.fromJson(jsonObj.get("results"), Song[].class);
 
             fetchedSongs = new ArrayList<>(Arrays.asList(songArray));
-
-            for (Song song : fetchedSongs) {
-                System.out.println(song);
-            }
+            
         } else {
             throw new Exception("Could not fetch songs.");
         }
