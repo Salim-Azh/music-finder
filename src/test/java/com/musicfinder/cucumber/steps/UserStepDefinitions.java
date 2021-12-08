@@ -23,8 +23,8 @@ public class UserStepDefinitions {
 
     @Given("the MusicFinder app is started")
     public void the_MusicFinder_app_is_started() {
-        UserRepository userRepository = new UserRepositoryImpl();
-        client = new Client(userRepository);
+        UserService userService = new UserService(new UserRepositoryImpl());
+        client = new Client(userService);
     }
 
     @When("the user registers with valid credentials")
@@ -48,9 +48,12 @@ public class UserStepDefinitions {
     }
 
     @Given("the following user exists :")
-    public void the_following_user_exists(User user) throws Exception {
-        UserService userService = new UserService();
-        userService.register(user);
+    public void the_following_user_exists(DataTable dataTable) throws Exception {
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (Map<String,String> columns : rows) {
+            client.register(columns.get("email"), columns.get("password"));
+        }
     }
 
     @When("the user registers with {string} for the email")
