@@ -6,9 +6,9 @@ import java.util.regex.Pattern;
 
 import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
+import com.musicfinder.service.ItunesSongFetcher;
+import com.musicfinder.service.SongFetcher;
 import com.musicfinder.service.UserService;
-import com.musicfinder.services.fetch.ItunesSongFetcher;
-import com.musicfinder.services.fetch.SongFetcher;
 
 public class Client {
 
@@ -74,7 +74,7 @@ public class Client {
     public void search(String term){
         songFetcher.search(term);
         List<Song> fetchedSongs = getFetchedSongs();
-        if(fetchedSongs.size() > 0){
+        if(!fetchedSongs.isEmpty()){
             System.out.println("Results:\n");
             for (Song song : fetchedSongs) {
                 System.out.println(song);

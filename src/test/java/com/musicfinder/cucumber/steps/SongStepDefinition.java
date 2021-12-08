@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import com.musicfinder.Client;
 import com.musicfinder.repository.UserRepositoryImpl;
 import com.musicfinder.service.UserService;
-import com.musicfinder.services.fetch.ItunesSongFetcher;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

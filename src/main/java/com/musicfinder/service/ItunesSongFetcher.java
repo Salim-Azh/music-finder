@@ -1,4 +1,4 @@
-package com.musicfinder.services.fetch;
+package com.musicfinder.service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,7 +21,10 @@ public class ItunesSongFetcher implements SongFetcher {
      */
     private List<Song> fetchedSongs;
 
-    public ItunesSongFetcher() {}
+    
+    public ItunesSongFetcher() {
+        this.fetchedSongs = new ArrayList<>();
+    }
 
     public List<Song> getFetchedSongs() {
         return fetchedSongs;
@@ -38,11 +41,10 @@ public class ItunesSongFetcher implements SongFetcher {
     @Override
     public List<Song> search(String term) {
         HttpURLConnection connection = null;
-        List<Song> fetchedSongs = new ArrayList<Song>();
 
-        term = term.replace(" ", "+"); //Case of mutliple words search
+        term = term.replace(" ", "+"); // Case of mutliple words search
 
-        try{
+        try {
             URL url = new URL("https://itunes.apple.com/search?limit=10&media=music&term=" + term);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -66,18 +68,18 @@ public class ItunesSongFetcher implements SongFetcher {
                 Song[] songArray = gson.fromJson(jsonObj.get("results"), Song[].class);
 
                 fetchedSongs = new ArrayList<>(Arrays.asList(songArray));
-                
+
             } else {
                 throw new Exception("Could not fetch songs.");
             }
-    }catch(Exception e){
-        e.printStackTrace();
-    }finally {
-        connection.disconnect();
-    }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            connection.disconnect();
+        }
 
-    setFetchedSongs(fetchedSongs);
-    return fetchedSongs;
-    
+        setFetchedSongs(fetchedSongs);
+        return fetchedSongs;
+
     }
 }

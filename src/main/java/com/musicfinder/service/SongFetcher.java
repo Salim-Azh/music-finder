@@ -1,4 +1,4 @@
-package com.musicfinder.services.fetch;
+package com.musicfinder.service;
 
 import java.util.List;
 
