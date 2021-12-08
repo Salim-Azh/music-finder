@@ -5,7 +5,10 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 import java.util.Map;
 
+import com.musicfinder.Client;
 import com.musicfinder.cucumber.states.ExceptionHandler;
+import com.musicfinder.model.User;
+import com.musicfinder.service.UserService;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.DataTableType;
@@ -15,12 +18,13 @@ import io.cucumber.java.en.When;
 
 public class UserStepDefinitions {
 
-    private final Client client;
+    private Client client;
     private String message;
 
     @Given("the MusicFinder app is started")
     public void the_MusicFinder_app_is_started() {
-        client = new Client();
+        UserRepository userRepository = new UserRepositoryImpl();
+        client = new Client(userRepository);
     }
 
     @When("the user registers with valid credentials")
@@ -44,7 +48,7 @@ public class UserStepDefinitions {
     }
 
     @Given("the following user exists :")
-    public void the_following_user_exists(User user) {
+    public void the_following_user_exists(User user) throws Exception {
         UserService userService = new UserService();
         userService.register(user);
     }
