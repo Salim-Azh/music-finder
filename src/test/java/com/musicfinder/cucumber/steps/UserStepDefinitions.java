@@ -1,19 +1,16 @@
 package com.musicfinder.cucumber.steps;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.Map;
 
 import com.musicfinder.Client;
 import com.musicfinder.cucumber.state.ExceptionHandler;
-import com.musicfinder.model.User;
 import com.musicfinder.repository.UserRepositoryImpl;
 import com.musicfinder.service.UserService;
 
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
