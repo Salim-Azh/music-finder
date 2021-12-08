@@ -29,7 +29,7 @@ public class UserStepDefinitions {
 
     @When("the user registers with valid credentials")
     public void the_user_registers_with_valid_credentials() {
-        message = client.register("toto@gmail.com", "azeaze");
+        message = client.register("tata@gmail.com", "azeaze");
     }
 
     @When("the user registers with an invalid email")

@@ -1,8 +1,10 @@
 package com.musicfinder.model;
 
+import org.bson.types.ObjectId;
+
 public class User {
 
-    private Long id;
+    private ObjectId id;
     private String email;
     private String password;
 
@@ -14,11 +16,23 @@ public class User {
         this.password = password;
     }
 
-    public Long getId() {
+    public User(ObjectId id, String email, String password) {
+        if (email == null || password == null || id == null) {
+            throw new IllegalArgumentException("Id, email or password cannot be null");
+        }
+        this.id = id;
+        this.email = email;
+        this.password = password;
+    }
+
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
         this.id = id;
     }
 
