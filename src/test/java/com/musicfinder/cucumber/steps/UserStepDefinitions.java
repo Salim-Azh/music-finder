@@ -1,13 +1,15 @@
 package com.musicfinder.cucumber.steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.Map;
 
 import com.musicfinder.Client;
-import com.musicfinder.cucumber.states.ExceptionHandler;
+import com.musicfinder.cucumber.state.ExceptionHandler;
 import com.musicfinder.model.User;
+import com.musicfinder.repository.UserRepositoryImpl;
 import com.musicfinder.service.UserService;
 
 import io.cucumber.datatable.DataTable;
@@ -20,6 +22,7 @@ public class UserStepDefinitions {
 
     private Client client;
     private String message;
+    private ExceptionHandler exceptionHandler = new ExceptionHandler();
 
     @Given("the MusicFinder app is started")
     public void the_MusicFinder_app_is_started() {
@@ -34,17 +37,22 @@ public class UserStepDefinitions {
 
     @When("the user registers with an invalid email")
     public void the_user_registers_with_invalid_email() {
-        message = client.register("toto", "azeaze");
+        exceptionHandler.expectException();
+        try {
+            client.register("toto.com", "azeaze");
+        } catch (IllegalArgumentException e) {
+            exceptionHandler.set(e);
+        }
     }
 
     @When("the user registers with a less than 6 characters password")
     public void the_user_registers_with_a_less_than_6_characters_password() {
-        message = client.register("toto@gmail.com", "aze");
-    }
-
-    @DataTableType
-    public User authorEntryTransformer(Map<String, String> entry) {
-        return new User(entry.get("email"), entry.get("password"));
+        exceptionHandler.expectException();
+        try {
+            client.register("toto@gmail.com", "aze");
+        } catch (IllegalArgumentException e) {
+            exceptionHandler.set(e);
+        }
     }
 
     @Given("the following user exists :")
@@ -61,8 +69,13 @@ public class UserStepDefinitions {
         message = client.register(email, "azeaze");
     }
 
-    @Then("the message {string} should be displayed")
+    @Then("the message {string} should be returned")
     public void the_message_should_be_displayed(String msg) {
         assertEquals(msg, message);
+    }
+
+    @Then("an exception with message {string} should be thrown")
+    public void the_error_message_should_be_thrown(String msg) {
+        assertEquals(msg, exceptionHandler.getException().getMessage());
     }
 }
