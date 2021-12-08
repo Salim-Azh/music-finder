@@ -1,6 +1,7 @@
 package com.musicfinder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -67,5 +68,17 @@ public class ClientTest extends BaseTestClass {
         String actual = client.register(email, password);
 
         assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void testSearchWithoutParam(){
+        client.search("");
+        assertEquals(0, client.getFetchedSongs().size());
+    }
+
+    @Test
+    public void testSearch(){
+        client.search("Easy");
+        assertNotEquals(0, client.getFetchedSongs().size());
     }
 }
