@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.musicfinder.model.User;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,6 +31,13 @@ public class UserRepositoryImplTest {
     public void onTeardown() {
         this.userRepositoryImpl = new UserRepositoryImpl();
         userRepositoryImpl.deleteAll();
+    }
+
+    
+    @AfterClass
+    public static void teardown(){
+        UserRepository userRepository = new UserRepositoryImpl();
+        userRepository.deleteAll();
     }
 
     @Test
