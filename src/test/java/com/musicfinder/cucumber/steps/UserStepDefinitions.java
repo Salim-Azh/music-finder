@@ -97,28 +97,38 @@ public class UserStepDefinitions {
         client.setConnectedUser(new User(new ObjectId(), "tata@gmail.com", "azeaze"));
     }
 
-    @When("the user search for Easy")
+    @When("the user searched for Easy")
     public void the_user_searched_for_easy(){
         client.search("Easy");
     }
 
-    @When("the user searched with an empty string")
+    @When("the user saves a song to his playlist with no search results before")
     public void searchForEasyEmpty(){
         client.search("");
+        exceptionHandler.expectException();
+        try {
+            client.saveSong(0);
+        } catch (Exception e) {
+            exceptionHandler.set(e);
+        }
+
     }
 
     @When("the user saves a song to his playlist")
     public void the_user_add_a_song_to_is_playlist() {
-        client.saveSong(0);
+        message = client.saveSong(0);
     }
 
     @When("the user saves the song with an out of range index")
     public void the_user_saves_with_an_out_of_range_index() {
-        client.saveSong(10);
+        exceptionHandler.expectException();
+        try {
+            client.saveSong(10);
+        } catch (Exception e) {
+            exceptionHandler.set(e);
+        }
+        
     }
     
-    @Then("the playlist should not be empty")
-    public void the_playlist_should_not_be_empty() {
-       assertTrue(!client.isConnectedUserPlaylistEmpty());
-    }
+  
 }
