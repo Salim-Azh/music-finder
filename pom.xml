@@ -12,6 +12,7 @@
   <url>https://github.com/Salim-Azh/music-finder</url>
 
   <properties>
+    <exec.mainClass>com.musicfinder.App</exec.mainClass>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
