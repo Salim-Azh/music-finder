@@ -9,6 +9,7 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.push;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.client.MongoCollection;
 import com.musicfinder.model.Playlist;
 import com.musicfinder.model.Song;
@@ -32,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
         Document doc = new Document(EMAIL, user.getEmail())
             .append("password", user.getPassword())
-            .append("playlist", Arrays.asList());
+            .append("playlist", new ArrayList<DBObject>());
 
         MongoCollection<Document> usersCollection = MongoDBClientConnection.getInstance().getUsersCollection();
         usersCollection.insertOne(doc);
@@ -63,6 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
             );
 
             List<Document> playlistDoc = userDoc.get("playlist", docClass);
+
             Playlist pl = new Playlist();
             if (playlistDoc != null) {
                 for (Document songDoc : playlistDoc) {
