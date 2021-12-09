@@ -1,5 +1,7 @@
 package com.musicfinder.model;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 
 public class User {
@@ -7,6 +9,7 @@ public class User {
     private ObjectId id;
     private String email;
     private String password;
+    private List<Song> playlist;
 
     public User(String email, String password) {
         if (email == null || password == null) {
@@ -23,6 +26,16 @@ public class User {
         this.id = id;
         this.email = email;
         this.password = password;
+    }
+
+    public User(ObjectId id, String email, String password, List<Song> playlist) {
+        if (email == null || password == null || id == null) {
+            throw new IllegalArgumentException("Id, email or password cannot be null");
+        }
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.playlist = playlist;
     }
 
     public ObjectId getId() {
@@ -56,6 +69,13 @@ public class User {
             throw new IllegalArgumentException("Password cannot be null");
         }
         this.password = password;
+    }
+
+    public List<Song> getPlaylist() {
+        return playlist;
+    }
+    public void setPlaylist(List<Song> playlList) {
+        this.playlist = playlList;
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.musicfinder.repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.mongodb.client.model.Filters.eq;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
 import com.musicfinder.persistence.MongoDBClientConnection;
 
@@ -14,6 +17,7 @@ import org.bson.Document;
 public class UserRepositoryImpl implements UserRepository {
 
     private static final String EMAIL = "email";
+    private Song playlist;
 
     @Override
     public Optional<User> save(User user) {

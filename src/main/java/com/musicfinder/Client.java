@@ -1,11 +1,19 @@
 package com.musicfinder;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bson.Document;
+import static com.mongodb.client.model.Filters.eq;
+
+import com.mongodb.client.MongoCollection;
 import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
+import com.musicfinder.persistence.MongoDBClientConnection;
+import com.musicfinder.repository.UserRepository;
+import com.musicfinder.repository.UserRepositoryImpl;
 import com.musicfinder.service.ItunesSongFetcher;
 import com.musicfinder.service.SongFetcher;
 import com.musicfinder.service.UserService;
@@ -85,6 +93,22 @@ public class Client {
         }
     }
 
+    public void saveSong(Song song) {
+        Document doc = new Document("trackname", song.gettrackName()).append("artistname", song.getArtistName());
+        MongoCollection<Document> songsCollection = MongoDBClientConnection.getInstance().getSongsCollection();
+        songsCollection.insertOne(doc);
+        
+
+        //Optional<User> opUs = new UserRepositoryImpl().getUserByEmail("toto@gmail");
+        Document usDoc = new Document("email", "salim@gmail.com").append("password", "azeaze");
+
+        MongoCollection<Document> userCollection = MongoDBClientConnection.getInstance().getUsersCollection();
+        userCollection.insertOne(usDoc);
+    
+    }
+    public void showPlaylist(User user) {
+        
+    }
     public void login(String email, String password){
         //TODO: Implement
     }
