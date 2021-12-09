@@ -85,7 +85,8 @@ public class Client {
         }
     }
 
-    public void login(String email, String password){
+    public String login(String email, String password){
         //TODO: Implement
+        return "";
     }
 }
