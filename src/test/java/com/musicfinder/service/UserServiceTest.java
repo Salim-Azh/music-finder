@@ -67,4 +67,25 @@ public class UserServiceTest extends BaseTestClass {
         userService.register(user);
         verify(userRepository, times(0)).save(any(User.class));
     }
+
+    @Test
+    public void login() throws Exception {
+        when(userRepository.getUserByEmail("toto@gmail.com")).thenReturn(Optional.of(user));
+
+        assertEquals(true, userService.login("toto@gmail.com","azeaze"));
+    }
+
+    @Test
+    public void login_fails_with_wrong_email() throws Exception {
+        when(userRepository.getUserByEmail("toto@gmail.com")).thenReturn(Optional.empty());
+
+        assertEquals(false, userService.login("toto@gmail.com","azeaze"));
+    }
+
+    @Test
+    public void login_fails_with_wrong_password() throws Exception {
+        when(userRepository.getUserByEmail("toto@gmail.com")).thenReturn(Optional.of(user));
+
+        assertEquals(false, userService.login("toto@gmail.com","a"));
+    }
 }
