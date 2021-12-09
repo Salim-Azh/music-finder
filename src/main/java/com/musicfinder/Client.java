@@ -1,6 +1,7 @@
 package com.musicfinder;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,8 @@ public class Client {
      * Used to communicate with external APIs in order to fetch songs
      */
     private final SongFetcher songFetcher;
+
+    private User connectedUser;
 
     private UserService userService;
 
@@ -86,7 +89,16 @@ public class Client {
     }
 
     public String login(String email, String password){
-        //TODO: Implement
-        return "";
+        if (email == null || password == null) {
+            throw new IllegalArgumentException("Email and password cannot be null");
+        }
+
+        try{
+            userService.login(email, password);
+            return "Successfully logged in!";
+        }catch(Exception e){
+            e.printStackTrace();
+            return e.getMessage();
+        }
     }
 }
