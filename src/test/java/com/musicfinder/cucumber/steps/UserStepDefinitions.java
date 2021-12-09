@@ -66,6 +66,16 @@ public class UserStepDefinitions {
         message = client.register(email, "azeaze");
     }
 
+    @When("the user try to log in with the following credentials: {string} and {string}")
+    public void the_user_try_to_log_in_with_right_credentials(String email, String password){
+        message = client.login(email, password);
+    }
+
+    @When("the user try to log in with the following wrong credentials: {string} and {string}")
+    public void the_user_try_to_log_in_with_wrong_credentials(String email, String password){
+        message = client.login(email, password);
+    }
+    
     @Then("the message {string} should be returned")
     public void the_message_should_be_displayed(String msg) {
         assertEquals(msg, message);
@@ -75,4 +85,5 @@ public class UserStepDefinitions {
     public void the_error_message_should_be_thrown(String msg) {
         assertEquals(msg, exceptionHandler.getException().getMessage());
     }
+
 }

@@ -1,6 +1,7 @@
 package com.musicfinder;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +19,8 @@ public class Client {
      */
     private final SongFetcher songFetcher;
 
+    private User connectedUser;
+
     private UserService userService;
 
     public Client(UserService userService) {
@@ -26,6 +29,14 @@ public class Client {
         }
         this.userService = userService;
         songFetcher = new ItunesSongFetcher();
+    }
+
+    public User getConnectedUser(){
+        return connectedUser;
+    }
+
+    public void setConnectedUser(User user){
+        connectedUser = user;
     }
 
     private boolean isValidEmail(String email) {
@@ -85,7 +96,18 @@ public class Client {
         }
     }
 
-    public void login(String email, String password){
-        //TODO: Implement
+    public String login(String email, String password){
+        if (email == null || password == null) {
+            throw new IllegalArgumentException("Email and password cannot be null");
+        }
+
+        try{
+            User connected = userService.login(email, password);
+            setConnectedUser(connected);
+            return "Successfully logged in!";
+        }catch(Exception e){
+            e.printStackTrace();
+            return e.getMessage();
+        }
     }
 }

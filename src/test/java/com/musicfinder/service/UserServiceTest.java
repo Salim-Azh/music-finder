@@ -1,6 +1,7 @@
 package com.musicfinder.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -66,5 +67,30 @@ public class UserServiceTest extends BaseTestClass {
 
         userService.register(user);
         verify(userRepository, times(0)).save(any(User.class));
+    }
+
+    @Test
+    public void login() throws Exception {
+        when(userRepository.getUserByEmail("toto@gmail.com")).thenReturn(Optional.of(user));
+
+        assertEquals(user, userService.login("toto@gmail.com","azeaze"));
+    }
+
+    @Test
+    public void login_should_fail_with_wrong_email() throws Exception {
+        when(userRepository.getUserByEmail("toto@gmail.com")).thenReturn(Optional.empty());
+
+        exceptionRule.expect(Exception.class);
+        exceptionRule.expectMessage("Invalid email or password...");
+        userService.login("toto@gmail.com","azeaze");
+    }
+
+    @Test
+    public void login_should_fail_with_wrong_password() throws Exception {
+        when(userRepository.getUserByEmail("toto@gmail.com")).thenReturn(Optional.of(user));
+
+        exceptionRule.expect(Exception.class);
+        exceptionRule.expectMessage("Invalid email or password...");
+        userService.login("toto@gmail.com","a");
     }
 }
