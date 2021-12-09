@@ -17,11 +17,11 @@ Feature: Log in
   |email           | password |
   |salim@gmail.com | azeaze   |
   When the user try to log in with the following wrong credentials: "salim@gmail.com" and "a"
-  Then an exception with message "Invalid email or password..." should be thrown
+  Then the message "Invalid email or password..." should be returned
   
   Scenario: User enters an invalid email
   Given the following user exists :
   |email           | password |
   |salim@gmail.com | azeaze   |
   When the user try to log in with the following wrong credentials: "salim@gmail" and "azeaze"
-  Then an exception with message "Invalid email or password..." should be thrown
+  Then the message "Invalid email or password..." should be returned

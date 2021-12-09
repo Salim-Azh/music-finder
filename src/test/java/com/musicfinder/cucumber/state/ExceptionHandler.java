@@ -8,11 +8,10 @@ public class ExceptionHandler {
         expectException = true;
     }
 
-    public void set(RuntimeException e) {
-        if (!expectException) {
-            throw e;
+    public void set(Exception e) {
+        if (expectException) {
+            exception = e;
         }
-        exception = e;
     }
 
     public Exception getException() {
