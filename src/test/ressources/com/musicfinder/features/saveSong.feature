@@ -6,9 +6,13 @@ Feature: Add songs
 
     Background: Adding a song
         Given the user is signed in
-        And the user researched for "Easy" 
+        When the user researched for "Easy" 
 
-    Scenario: Song added to playlist
-        Given the result of the search
-        When the user add a song to is playlist
-        Then the song should appear in the playlist 
+    Scenario: Success save to playlist
+        When the user saves a song to his playlist
+        Then the song should appear in the playlist
+    
+    Scenario: Out of range index
+        When the user saves the song at an out of range index
+        Then the message should the
+    
