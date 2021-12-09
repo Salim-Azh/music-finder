@@ -9,7 +9,7 @@ Feature: Log in
   Given the following user exists :
   |email           | password |
   |salim@gmail.com | azeaze   |
-  When the user try to log in with the following credentials: "salim@gmail" and "azaze"
+  When the user try to log in with the following credentials: "salim@gmail.com" and "azaze"
   Then the message "Successfully logged in!" should be returned
 
   Scenario: User enters an invalid password

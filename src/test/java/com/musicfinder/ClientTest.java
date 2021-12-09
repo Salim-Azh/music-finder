@@ -71,18 +71,18 @@ public class ClientTest extends BaseTestClass {
     }
 
     @Test
-    public void login(){
+    public void login() throws Exception{
         String expected = "Successfully logged in!";
-        when(userService.login(any(String.class), any(String.class))).thenReturn(true);
+        when(userService.login(any(String.class), any(String.class))).thenReturn(user);
         String actual = client.login(email, password);
 
         assertEquals(expected, actual);
     }
 
     @Test
-    public void login_should_fail_with_wrong_credentials(){
+    public void login_should_fail_with_wrong_credentials() throws Exception{
         String expected = "Invalid email or password...";
-        when(userService.login(any(String.class), any(String.class))).thenReturn(false);
+        when(userService.login(any(String.class), any(String.class))).thenThrow(new Exception(expected));
         String actual = client.login(email, password);
 
         assertEquals(expected, actual);
