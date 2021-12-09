@@ -1,15 +1,22 @@
 package com.musicfinder.repository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.push;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import com.musicfinder.model.Playlist;
+import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
 import com.musicfinder.persistence.MongoDBClientConnection;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -23,8 +30,9 @@ public class UserRepositoryImpl implements UserRepository {
         if (getUserByEmail(user.getEmail()).isPresent()) {
             throw new IllegalArgumentException("An account already exists for this email");
         }
-        Document doc = new Document(EMAIL, user.getEmail()).append("password", user.getPassword()).append("playlist",
-                new Document());
+        Document doc = new Document(EMAIL, user.getEmail())
+            .append("password", user.getPassword())
+            .append("playlist", Arrays.asList());
 
         MongoCollection<Document> usersCollection = MongoDBClientConnection.getInstance().getUsersCollection();
         usersCollection.insertOne(doc);
@@ -41,11 +49,34 @@ public class UserRepositoryImpl implements UserRepository {
 
         MongoCollection<Document> usersCollection = MongoDBClientConnection.getInstance().getUsersCollection();
 
+        final Class<? extends List> docClass = new ArrayList<Document>().getClass();
+
         Document userDoc = usersCollection.find(eq(EMAIL, email)).first();
 
+        User optValue;
         if (userDoc != null) {
-            optionalUser = Optional.of(new User(userDoc.getObjectId("_id"), userDoc.get(EMAIL).toString(),
-                    userDoc.get("password").toString()));
+           
+            optValue = new User(
+                userDoc.getObjectId("_id"),
+                userDoc.get(EMAIL).toString(),
+                userDoc.get("password").toString()
+            );
+
+            List<Document> playlistDoc = userDoc.get("playlist", docClass);
+            Playlist pl = new Playlist();
+            if (playlistDoc != null) {
+                for (Document songDoc : playlistDoc) {
+                    Song song = new Song(
+                        songDoc.getObjectId("_id"),
+                        songDoc.get("trackName").toString(),
+                        songDoc.get("artistName").toString(),
+                        songDoc.get("genre").toString());
+                    pl.add(song);
+                }
+                optValue.setPlaylist(pl);
+            }
+
+            optionalUser = Optional.of(optValue);
         }
 
         return optionalUser;
@@ -61,4 +92,21 @@ public class UserRepositoryImpl implements UserRepository {
         usersCollection.deleteMany(document);
 
     }
+
+    @Override
+    public Optional<User> addSongToPlaylist(User user, Song song) {
+        if (user == null || song == null) {
+            throw new IllegalArgumentException("user and song cannot be null");
+        }
+        MongoCollection<Document> usersCollection = MongoDBClientConnection.getInstance().getUsersCollection();
+        Document doc = new Document("_id", new ObjectId())
+            .append("trackName", song.gettrackName())
+            .append("artistName", song.getArtistName())
+            .append("genre", song.getGenre());
+
+        usersCollection.findOneAndUpdate(eq(EMAIL, user.getEmail()), push("playlist", doc));
+
+        return getUserByEmail(user.getEmail());
+    }
+
 }

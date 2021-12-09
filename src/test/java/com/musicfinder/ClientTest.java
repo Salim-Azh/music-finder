@@ -5,9 +5,16 @@ import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.musicfinder.model.Playlist;
+import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
+import com.musicfinder.service.PlaylistService;
 import com.musicfinder.service.UserService;
 
+import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,14 +28,18 @@ public class ClientTest extends BaseTestClass {
     @Mock
     private UserService userService;
 
+    @Mock
+    private PlaylistService playlistService;
+
     //Test data
     private final String email = "toto@gmail.com";
     private final String password = "azeaze";
     private final User user = new User(email,password);
+    private final Song song = new Song(new ObjectId(), "toto", "tata", "titi");
 
     @Before
     public void setup() {
-        client = new Client(userService);
+        client = new Client(userService, playlistService);
     }   
     
     @Test
@@ -98,5 +109,42 @@ public class ClientTest extends BaseTestClass {
     public void testSearch(){
         client.search("Easy");
         assertNotEquals(0, client.getFetchedSongs().size());
+    }
+
+    @Test
+    public void saveSong() throws Exception {
+        //given
+        String expected = "Song saved to playlist";
+        client.setConnectedUser(user);
+        client.search("Easy");
+        List<Song> songs = new ArrayList<>(); 
+        songs.add(song);
+        Playlist pl = new Playlist(songs);
+        user.setPlaylist(pl);
+        when(playlistService.saveSong(any(User.class), any(Song.class))).thenReturn(user);
+
+        //when
+        String actual = client.saveSong(0);
+
+        //then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void saveSongShouldFailWhenNoSearchResult() {
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage("No results from search you must search for a song before saving it to playlist");
+        client.setConnectedUser(user);
+        client.saveSong(0);
+    }
+
+    @Test
+    public void saveSongShouldFailWhenInvalidIndex() {
+        //given
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage("No such song exist the index shoud be between 0 and 9");
+        client.search("Easy");
+        //when
+        client.saveSong(10);
     }
 }

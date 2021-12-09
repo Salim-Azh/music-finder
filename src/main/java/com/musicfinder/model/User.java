@@ -7,6 +7,7 @@ public class User {
     private ObjectId id;
     private String email;
     private String password;
+    private Playlist playlist;
 
     public User(String email, String password) {
         if (email == null || password == null) {
@@ -14,15 +15,27 @@ public class User {
         }
         this.email = email;
         this.password = password;
+        this.playlist = new Playlist();
     }
 
-    public User(ObjectId id, String email, String password) {
+    public User(ObjectId id, String email, String password, Playlist playlist) {
         if (email == null || password == null || id == null) {
             throw new IllegalArgumentException("Id, email or password cannot be null");
         }
         this.id = id;
         this.email = email;
         this.password = password;
+        this.playlist = playlist;
+    }
+
+    public User(ObjectId id, String email, String password) {
+        if (id == null || email == null || password == null) {
+            throw new IllegalArgumentException("id, Email or password cannot be null");
+        }
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.playlist = new Playlist();
     }
 
     public ObjectId getId() {
@@ -58,6 +71,15 @@ public class User {
         this.password = password;
     }
 
+    
+    public Playlist getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(Playlist playlist) {
+        this.playlist = playlist;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -65,6 +87,7 @@ public class User {
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((playlist == null) ? 0 : playlist.hashCode());
         return result;
     }
 
@@ -92,6 +115,13 @@ public class User {
                 return false;
         } else if (!password.equals(other.password))
             return false;
+        if (playlist == null) {
+            if (other.playlist != null)
+                return false;
+        } else if (!playlist.equals(other.playlist))
+            return false;
         return true;
     }
+
+
 }

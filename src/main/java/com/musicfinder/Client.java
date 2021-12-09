@@ -6,10 +6,12 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.musicfinder.model.Playlist;
 import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
 import com.musicfinder.repository.UserRepositoryImpl;
 import com.musicfinder.service.ItunesSongFetcher;
+import com.musicfinder.service.PlaylistService;
 import com.musicfinder.service.SongFetcher;
 import com.musicfinder.service.UserService;
 
@@ -25,16 +27,22 @@ public class Client {
 
     private UserService userService;
 
+    private PlaylistService playlistService;
+
     public Client(){
         userService = new UserService(new UserRepositoryImpl());
         songFetcher = new ItunesSongFetcher();
     }
 
-    public Client(UserService userService) {
+    public Client(UserService userService, PlaylistService playlistService) {
         if (userService == null) {
             throw new IllegalArgumentException("User service cannot be null");
         }
+        if (playlistService == null) {
+            throw new IllegalArgumentException("Playlist service cannot be null");
+        }
         this.userService = userService;
+        this.playlistService = playlistService;
         songFetcher = new ItunesSongFetcher();
     }
 
@@ -129,10 +137,7 @@ public class Client {
                     +"To register, enter <register email password>\n\n");
                 String choice = sc.nextLine();
                 String[] splitChoice = choice.split(" ");
-                System.out.println("SPLIT CHOICE = " + splitChoice);
-                for(String str : splitChoice){
-                    System.out.println(str);
-                }
+                
                 System.out.println("\n\n");
                 if(splitChoice.length == 3){
                     if(splitChoice[0].equals("login")){
@@ -144,6 +149,7 @@ public class Client {
                     }
                 }
             }
+            
             System.out.println("Welcome, " + connectedUser.getEmail() + "!\n");
             System.out.println(
                 "Enter <search followed by the name of a song> or its singer to search for songs."
@@ -164,5 +170,30 @@ public class Client {
             }
             
         }
+    }
+
+    public String saveSong(Integer index) {
+        if (index == null || index < 0 || (index >= getFetchedSongs().size() && !getFetchedSongs().isEmpty() )) {
+            throw new IllegalArgumentException("No such song exist the index shoud be between 0 and 9");
+        }
+        if (getFetchedSongs().isEmpty()) {
+            throw new IllegalArgumentException("No results from search you must search for a song before saving it to playlist");
+        }
+        User user;
+        try {
+            user = playlistService.saveSong(connectedUser, getFetchedSongs().get(index));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        setConnectedUser(user);
+        return "Song saved to playlist";
+    }
+
+    public boolean isConnectedUserPlaylistEmpty() {
+        if(connectedUser != null){
+            return connectedUser.getPlaylist().isEmpty();
+        }
+        return true;
     }
 }
