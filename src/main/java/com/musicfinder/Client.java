@@ -1,13 +1,14 @@
 package com.musicfinder;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.musicfinder.model.Playlist;
 import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
 import com.musicfinder.service.ItunesSongFetcher;
+import com.musicfinder.service.PlaylistService;
 import com.musicfinder.service.SongFetcher;
 import com.musicfinder.service.UserService;
 
@@ -23,11 +24,17 @@ public class Client {
 
     private UserService userService;
 
-    public Client(UserService userService) {
+    private PlaylistService playlistService;
+
+    public Client(UserService userService, PlaylistService playlistService) {
         if (userService == null) {
             throw new IllegalArgumentException("User service cannot be null");
         }
+        if (playlistService == null) {
+            throw new IllegalArgumentException("Playlist service cannot be null");
+        }
         this.userService = userService;
+        this.playlistService = playlistService;
         songFetcher = new ItunesSongFetcher();
     }
 
@@ -109,5 +116,30 @@ public class Client {
             e.printStackTrace();
             return e.getMessage();
         }
+    }
+
+    public String saveSong(Integer index) {
+        if (index == null || index < 0 || (index >= getFetchedSongs().size() && !getFetchedSongs().isEmpty() )) {
+            throw new IllegalArgumentException("No such song exist the index shoud be between 0 and 9");
+        }
+        if (getFetchedSongs().isEmpty()) {
+            throw new IllegalArgumentException("No results from search you must search for a song before saving it to playlist");
+        }
+        User user;
+        try {
+            user = playlistService.saveSong(connectedUser, getFetchedSongs().get(index));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        setConnectedUser(user);
+        return "Song saved to playlist";
+    }
+
+    public boolean isConnectedUserPlaylistEmpty() {
+        if(connectedUser != null){
+            return connectedUser.getPlaylist().isEmpty();
+        }
+        return true;
     }
 }

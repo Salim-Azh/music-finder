@@ -4,8 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
+import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
 
+import org.bson.types.ObjectId;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +22,7 @@ public class UserRepositoryImplTest {
 
     //Test data
     private final User user = new User("toto@gmail.com", "azeaze");
+    private final Song song = new Song(new ObjectId(), "toto", "tata", "titi");
 
     @Before
     public void onSetup() {
@@ -81,4 +84,29 @@ public class UserRepositoryImplTest {
         Optional<User> retrievedUser = userRepositoryImpl.getUserByEmail(null);
         assertTrue(retrievedUser.isEmpty());
     }
+
+    @Test
+    public void  addSongToPlaylist() {
+        Optional<User> savedUser = userRepositoryImpl.save(user);
+        Optional<User> updatedUser = userRepositoryImpl.addSongToPlaylist(savedUser.get(), song);
+        assertTrue(updatedUser.isPresent());
+    }
+
+    @Test
+    public void  addSongToPlaylistShouldFailWhenUserNull() {
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage("user and song cannot be null");
+        
+        userRepositoryImpl.addSongToPlaylist(null, song);
+        
+    }
+
+    @Test
+    public void  addSongToPlaylistShouldFailWhenSongNull() {
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage("user and song cannot be null");
+        
+        userRepositoryImpl.addSongToPlaylist(user, null);
+    }
+
 }

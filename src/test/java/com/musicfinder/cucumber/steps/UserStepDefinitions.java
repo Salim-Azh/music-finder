@@ -1,14 +1,19 @@
 package com.musicfinder.cucumber.steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
 
 import com.musicfinder.Client;
 import com.musicfinder.cucumber.state.ExceptionHandler;
+import com.musicfinder.model.User;
 import com.musicfinder.repository.UserRepositoryImpl;
+import com.musicfinder.service.PlaylistService;
 import com.musicfinder.service.UserService;
+
+import org.bson.types.ObjectId;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
@@ -24,7 +29,8 @@ public class UserStepDefinitions {
     @Given("the MusicFinder app is started")
     public void the_MusicFinder_app_is_started() {
         UserService userService = new UserService(new UserRepositoryImpl());
-        client = new Client(userService);
+        PlaylistService playlistService = new PlaylistService(new UserRepositoryImpl());
+        client = new Client(userService, playlistService);
     }
 
     @When("the user registers with valid credentials")
@@ -86,4 +92,33 @@ public class UserStepDefinitions {
         assertEquals(msg, exceptionHandler.getException().getMessage());
     }
 
+    @Given("the user is logged in")
+    public void theUserIsLoggedIn() {
+        client.setConnectedUser(new User(new ObjectId(), "tata@gmail.com", "azeaze"));
+    }
+
+    @When("the user search for Easy")
+    public void the_user_searched_for_easy(){
+        client.search("Easy");
+    }
+
+    @When("the user searched with an empty string")
+    public void searchForEasyEmpty(){
+        client.search("");
+    }
+
+    @When("the user saves a song to his playlist")
+    public void the_user_add_a_song_to_is_playlist() {
+        client.saveSong(0);
+    }
+
+    @When("the user saves the song with an out of range index")
+    public void the_user_saves_with_an_out_of_range_index() {
+        client.saveSong(10);
+    }
+    
+    @Then("the playlist should not be empty")
+    public void the_playlist_should_not_be_empty() {
+       assertTrue(!client.isConnectedUserPlaylistEmpty());
+    }
 }

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 
 import com.musicfinder.Client;
 import com.musicfinder.repository.UserRepositoryImpl;
+import com.musicfinder.service.PlaylistService;
 import com.musicfinder.service.UserService;
 
 import io.cucumber.java.en.Given;
@@ -18,7 +19,8 @@ public class SongStepDefinition {
     @Given("the user is signed in")
     public void the_user_is_signed_in() {
         UserService userService = new UserService(new UserRepositoryImpl());
-        client = new Client(userService);
+        PlaylistService playlistService = new PlaylistService(new UserRepositoryImpl());
+        client = new Client(userService, playlistService);
         client.login("","");
     }
 

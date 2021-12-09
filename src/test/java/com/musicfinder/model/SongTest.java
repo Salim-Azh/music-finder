@@ -2,6 +2,7 @@ package com.musicfinder.model;
 
 import static org.junit.Assert.assertEquals;
 
+import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,11 +10,13 @@ public class SongTest {
 
     private Song song;
     private Song emptySong;
+    private ObjectId songOid;
 
     @Before
     public void setUp(){
         emptySong = new Song();
-        song = new Song(1, "Easy", "Troye", "Pop");
+        songOid = new ObjectId();
+        song = new Song(songOid, "Easy", "Troye", "Pop");
     }
 
     @Test
@@ -23,7 +26,7 @@ public class SongTest {
 
     @Test
     public void testEquals(){
-        assertEquals(true, song.equals(new Song(1, "Easy", "Troye", "Pop")));
+        assertEquals(true, song.equals(new Song(songOid, "Easy", "Troye", "Pop")));
     }
     
 }

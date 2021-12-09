@@ -1,7 +1,9 @@
 package com.musicfinder.model;
 
+import org.bson.types.ObjectId;
+
 public class Song {
-    private int id;
+    private ObjectId id;
     private String trackName;
     private String artistName;
     private String genre;
@@ -9,18 +11,18 @@ public class Song {
     public Song() {
     }
 
-    public Song(int id, String trackName, String artistName, String genre) {
+    public Song(ObjectId id, String trackName, String artistName, String genre) {
         this.id = id;
         this.trackName = trackName;
         this.artistName = artistName;
         this.genre = genre;
     }
 
-    public int getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -48,13 +50,14 @@ public class Song {
         this.genre = genre;
     }
 
+    
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((artistName == null) ? 0 : artistName.hashCode());
         result = prime * result + ((genre == null) ? 0 : genre.hashCode());
-        result = prime * result + id;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((trackName == null) ? 0 : trackName.hashCode());
         return result;
     }
@@ -78,7 +81,10 @@ public class Song {
                 return false;
         } else if (!genre.equals(other.genre))
             return false;
-        if (id != other.id)
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
             return false;
         if (trackName == null) {
             if (other.trackName != null)
@@ -90,8 +96,6 @@ public class Song {
 
     @Override
     public String toString() {
-        return "Song [artistName=" + artistName + ", trackName=" + trackName + "]";
-    }
-
-    
+        return "\tSong [artistName=" + artistName + ", trackName=" + trackName + ", genre=" + genre + "]\n";
+    }    
 }
