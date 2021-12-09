@@ -12,14 +12,14 @@ Feature: Log in
   When the user try to log in with the following credentials: "salim@gmail" and "azaze"
   Then the message "Successfully logged in!" should be returned
 
-  Scenario: Invalid password
+  Scenario: User enters an invalid password
   Given the following user exists :
   |email           | password |
   |salim@gmail.com | azeaze   |
   When the user try to log in with the following credentials: "salim@gmail.com" and "a"
   Then an exception with message "Invalid email or password..." should be thrown
   
-  Scenario: Invalid email
+  Scenario: User enters an invalid email
   Given the following user exists :
   |email           | password |
   |salim@gmail.com | azeaze   |
