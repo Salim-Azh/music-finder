@@ -31,6 +31,14 @@ public class Client {
         songFetcher = new ItunesSongFetcher();
     }
 
+    public User getConnectedUser(){
+        return connectedUser;
+    }
+
+    public void setConnectedUser(User user){
+        connectedUser = user;
+    }
+
     private boolean isValidEmail(String email) {
         String regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
         Matcher matcher = Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(email);
@@ -94,7 +102,8 @@ public class Client {
         }
 
         try{
-            userService.login(email, password);
+            User connected = userService.login(email, password);
+            setConnectedUser(connected);
             return "Successfully logged in!";
         }catch(Exception e){
             e.printStackTrace();
