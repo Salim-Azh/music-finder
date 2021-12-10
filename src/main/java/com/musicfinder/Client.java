@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import com.musicfinder.model.Playlist;
 import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
+import com.musicfinder.repository.UserRepository;
 import com.musicfinder.repository.UserRepositoryImpl;
 import com.musicfinder.service.ItunesSongFetcher;
 import com.musicfinder.service.PlaylistService;
@@ -31,6 +32,7 @@ public class Client {
 
     public Client(){
         userService = new UserService(new UserRepositoryImpl());
+        playlistService = new PlaylistService(new UserRepositoryImpl());
         songFetcher = new ItunesSongFetcher();
     }
 
@@ -102,8 +104,8 @@ public class Client {
         List<Song> fetchedSongs = getFetchedSongs();
         if(!fetchedSongs.isEmpty()){
             System.out.println("Results:\n");
-            for (Song song : fetchedSongs) {
-                System.out.println(song);
+            for (int i = 0; i < fetchedSongs.size(); i++) {
+                System.out.println(i + " - " + fetchedSongs.get(i));
             }
             System.out.println();
         } else {
@@ -149,26 +151,39 @@ public class Client {
                     }
                 }
             }
-            
+
             System.out.println("Welcome, " + connectedUser.getEmail() + "!\n");
             System.out.println(
-                "Enter <search followed by the name of a song> or its singer to search for songs."
-                +"Once you've made a research, enter <add followed by the index of a song> to add it to your playlist."
-                +"Enter <playlist> to see your playlist."
+                "Enter <search followed by the name of a song> or its singer to search for songs.\n"
+                +"\n\n"
+                +displayPlaylist()
                 );
             String[] choice = sc.nextLine().split(" ");
             if(choice.length > 0){
                 if(choice[0].equals("search")){
                     search(choice[1]);
-                } else if(choice[0].equals("add")){
-                    //Todo add
-                } else if(choice[0].equals("playlist")){
-                    //todo playlist
+                    if(!getFetchedSongs().isEmpty()){
+                        System.out.println("Too add a song, enter <add index>, else hit enter.");
+                        choice = sc.nextLine().split(" ");
+                        if(choice[0].equals("add")){
+                            System.out.println(saveSong(Integer.valueOf(choice[1])));
+                        }
+                    }
                 } else {
                     System.out.println("Enter a valid instruction please.");
                 }
             }
             
+        }
+    }
+
+    public String displayPlaylist(){
+        if(connectedUser == null){
+            return "Error, unauthorized." ;
+        } else if (connectedUser.getPlaylist() == null || isConnectedUserPlaylistEmpty()){
+            return "Your playlist is empty...";
+        } else {
+            return "Here's your playlist: " + connectedUser.getPlaylist().toString();
         }
     }
 
