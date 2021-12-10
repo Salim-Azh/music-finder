@@ -149,7 +149,7 @@ public class Client {
                     }
                 }
             }
-            
+
             System.out.println("Welcome, " + connectedUser.getEmail() + "!\n");
             System.out.println(
                 "Enter <search followed by the name of a song> or its singer to search for songs."
@@ -161,14 +161,24 @@ public class Client {
                 if(choice[0].equals("search")){
                     search(choice[1]);
                 } else if(choice[0].equals("add")){
-                    //Todo add
+                    saveSong(Integer.valueOf(choice[1]));
                 } else if(choice[0].equals("playlist")){
-                    //todo playlist
+                    
                 } else {
                     System.out.println("Enter a valid instruction please.");
                 }
             }
             
+        }
+    }
+
+    public String displayPlaylist(){
+        if(connectedUser == null){
+            return "Error, unauthorized." ;
+        } else if (connectedUser.getPlaylist() == null || isConnectedUserPlaylistEmpty()){
+            return "Your playlist is empty...";
+        } else {
+            return "Here's your playlist: " + connectedUser.getPlaylist().toString();
         }
     }
 

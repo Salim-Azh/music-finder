@@ -1,6 +1,7 @@
 package com.musicfinder.cucumber.steps;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.Map;
 
 import com.musicfinder.Client;
 import com.musicfinder.cucumber.state.ExceptionHandler;
+import com.musicfinder.model.Playlist;
+import com.musicfinder.model.Song;
 import com.musicfinder.model.User;
 import com.musicfinder.repository.UserRepositoryImpl;
 import com.musicfinder.service.PlaylistService;
@@ -129,6 +132,25 @@ public class UserStepDefinitions {
         }
         
     }
+
+    @Given("the user's playlist is not empty")
+    public void the_user_playlist_is_not_empty(){
+        User tmp = client.getConnectedUser();
+        tmp.setPlaylist(new Playlist());
+        tmp.getPlaylist().add(new Song(new ObjectId(), "Easy", "Test", "test"));
+        client.setConnectedUser(tmp);
+    }
+
+    @When("the user asks to see his playlist")
+    public void the_user_asks_to_see_his_playlist(){
+        message = client.displayPlaylist();
+    }
+
+    @Then("the user should see his playlist")
+    public void the_user_should_see_his_playlist(){
+        assertNotEquals(0,client.getFetchedSongs().size());
+    }
+
     
   
 }
