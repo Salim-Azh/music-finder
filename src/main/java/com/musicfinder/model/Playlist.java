@@ -50,7 +50,7 @@ public class Playlist {
 
     @Override
     public String toString() {
-        return "Your Playlist : [playlist=\n\t" + playlist + "\n]";
+        return "\n" + playlist + "\n";
     }
 
     public void add(Song song) {
