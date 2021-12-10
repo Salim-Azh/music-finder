@@ -1,7 +1,6 @@
 package com.musicfinder.repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,18 +65,25 @@ public class UserRepositoryImpl implements UserRepository {
             List<Document> playlistDoc = userDoc.get("playlist", docClass);
 
             Playlist pl = new Playlist();
-            if (playlistDoc != null) {
+            if (playlistDoc != null && !playlistDoc.isEmpty()) {
                 for (Document songDoc : playlistDoc) {
-                    Song song = new Song(
-                        songDoc.getObjectId("_id"),
-                        songDoc.get("trackName").toString(),
-                        songDoc.get("artistName").toString(),
-                        songDoc.get("genre").toString());
-                    pl.add(song);
+                    if (songDoc!=null) {
+                        ObjectId oid = songDoc.getObjectId("_id");
+                        Object g = songDoc.get("genre");
+                        Object a = songDoc.get("artistName");
+                        Object t = songDoc.get("trackName");
+                        if (oid != null && t != null && a != null ) {
+                            Song song = new Song(oid, t.toString(), a.toString(), null);
+                            if (g != null) {
+                                song.setGenre(g.toString());
+                            }
+                            pl.add(song);
+                        }
+                         
+                    }
                 }
                 optValue.setPlaylist(pl);
             }
-
             optionalUser = Optional.of(optValue);
         }
 
