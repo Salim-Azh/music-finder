@@ -1,8 +1,7 @@
 package com.musicfinder.cucumber.steps;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 import java.util.Map;
@@ -148,7 +147,7 @@ public class UserStepDefinitions {
 
     @Then("the user should see his playlist")
     public void the_user_should_see_his_playlist(){
-        assertNotEquals(0,client.getFetchedSongs().size());
+        assertFalse(client.isConnectedUserPlaylistEmpty());
     }
 
     
