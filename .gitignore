@@ -29,3 +29,8 @@ hs_err_pid*
 .project
 .settings/
 target/
+
+# dotenv
+.env
+#OS
+.DS_Store

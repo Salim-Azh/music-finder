@@ -1,15 +1,16 @@
 package com.musicfinder;
 
-import static org.junit.Assert.assertTrue;
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
 
-import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public class AppTest 
-{
+@RunWith(Cucumber.class)
+@CucumberOptions(
+    plugin = {"pretty"},
+    publish = true,
+    features = "src/test/ressources/"
+)
+public class AppTest {
 
-    @Test
-    public void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
-    }
 }
